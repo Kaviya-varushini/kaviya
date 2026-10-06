@@ -1,0 +1,1351 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The BluePrints - We Build Your Ideas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind config MUST come after CDN -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#1E40AF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .theme-transition {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .dark .hero-gradient {
+      background: linear-gradient(135deg, #2D3748 0%, #1A202C 100%);
+    }
+
+    .content-slide {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .content-slide.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .input-style {
+      border: 1px solid #d1d5db;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: white;
+    }
+
+    .dark .input-style {
+      background: #102a4d;
+      color: white;
+    }
+
+    @keyframes flash {
+
+      0%,
+      50%,
+      100% {
+        opacity: 1;
+      }
+
+      25%,
+      75% {
+        opacity: 0;
+      }
+    }
+
+    .flash-text {
+      animation: flash 1.5s infinite;
+    }
+
+    @keyframes three-d-rotate {
+
+      0%,
+      100% {
+        transform: rotateX(0deg) rotateY(0deg);
+      }
+
+      25% {
+        transform: rotateX(5deg) rotateY(5deg);
+      }
+
+      50% {
+        transform: rotateX(0deg) rotateY(10deg);
+      }
+
+      75% {
+        transform: rotateX(-5deg) rotateY(5deg);
+      }
+    }
+
+    .three-d-animated {
+      animation: three-d-rotate 6s ease-in-out infinite;
+      transform-style: preserve-3d;
+    }
+
+    /* Hide home slider arrows on mobile only */
+    @media (max-width: 768px) {
+
+      #home-prev-slide,
+      #home-next-slide {
+        display: none !important;
+      }
+    }
+
+    .dark img {
+      border-radius: 13px;
+    }
+
+    .course-card {
+      transition: transform 0.5s ease, box-shadow 0.5s ease
+    }
+
+    .course-card:hover {
+      transform: perspective(1000px) rotateY(10deg) scale(1.05);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .poster-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      max-width: 24rem;
+      min-height: 12rem;
+      margin: 0 auto;
+      background: #111;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      animation: posterShift 8s ease-in-out infinite;
+    }
+
+    .poster-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), transparent 24%);
+      pointer-events: none;
+    }
+
+    .poster-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: posterZoom 12s ease-in-out infinite alternate;
+      transition: transform 0.5s ease;
+    }
+
+    .poster-card:hover img {
+      transform: scale(1.05);
+    }
+
+    @keyframes posterShift {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      25% {
+        transform: translateX(3px) translateY(-5px) rotate(-0.35deg);
+      }
+
+      50% {
+        transform: translateX(-3px) translateY(6px) rotate(0.35deg);
+      }
+
+      75% {
+        transform: translateX(4px) translateY(-4px) rotate(-0.2deg);
+      }
+    }
+
+    @keyframes posterZoom {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1.02);
+      }
+    }
+
+    @view-transition {
+      navigation: auto;
+    }
+  </style>
+
+</head>
+
+<body class="theme-transition bg-white dark:bg-gray-900 text-gray-900 dark:text-white"><!-- Navigation -->
+  <nav class="fixed top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md z-50 shadow-sm theme-transition">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex-shrink-0"><img src="https://i.ibb.co/LXgFKr5x/logo.png" alt="The BluePrints Logo"
+            class="h-12 w-auto">
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-10 flex items-baseline space-x-4"><a href="#home"
+              class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+            <a href="#about"
+              class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+            <a href="#courses"
+              class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">Courses</a>
+
+            <a href="#contact"
+              class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">Contact</a>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4"><!-- Theme Toggle --> <button id="theme-toggle"
+            class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <svg id="sun-icon" class="w-5 h-5 hidden dark:block" fill="currentColor" viewbox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                clip-rule="evenodd" />
+            </svg>
+            <svg id="moon-icon" class="w-5 h-5 block dark:hidden" fill="currentColor" viewbox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+            </svg></button> <!-- Mobile menu button --> <button id="mobile-menu-btn"
+            class="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg></button>
+        </div>
+      </div>
+    </div><!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-gray-900 border-t dark:border-gray-700">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3"><a href="#home"
+          class="block hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors">Home</a>
+        <a href="#about"
+          class="block hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors">About</a>
+        <a href="#courses"
+          class="block hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors">Courses</a>
+        <a href="#contact"
+          class="block hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors">Contact</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Home Section with Full Background Carousel -->
+  <section id="home" class="relative min-h-[82vh] sm:min-h-[88vh] pt-16 overflow-hidden">
+    <!-- Background Carousel -->
+    <div class="absolute inset-0 z-0">
+      <div id="home-bg-carousel-container" class="flex transition-transform duration-1000 ease-in-out h-full">
+
+        <!-- Background Slide 0: Start Early / New Intro (internship-themed) -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div>
+
+        <!-- Background Slide 1: Drafting-->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image:
+         linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+         url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        </div>
+
+        <!-- Background Slide 2: Women Safety Laws -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image:
+           linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+          url('https://images.unsplash.com/photo-1589391886645-d51941baf7fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+        </div><!-- Background Slide 3: Cybersecurity -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div><!-- Background Slide 4: Crimes Investigation -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div><!-- Background Slide 5: Cognitive Interviewing -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-[position:center_25%] bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div><!-- Background Slide 6: Juvenile Justice -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div><!-- Background Slide 7: Child Psychology -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div><!-- Background Slide 8: Forensic Psychology -->
+        <div class="w-full flex-shrink-0 h-full bg-cover bg-center bg-no-repeat"
+          style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1920&amp;q=80');">
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Overlay -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center text-white mb-16">
+        <div class="fade-in">
+          <div class="flex flex-col items-center gap-4">
+            <h1 class="text-5xl md:text-7xl font-bold drop-shadow-lg text-violet-400">Blueprints</h1>
+
+            <p class="text-xl md:text-2xl opacity-90 drop-shadow-md">we build your ideas</p>
+
+          </div>
+        </div>
+      </div>
+      <!-- Content Carousel -->
+      <div class="relative fade-in mb-16">
+        <div id="home-content-carousel" class="text-center text-white">
+
+          <!-- Content Slide 0: Start Early / New Intro -->
+          <div class="content-slide active">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Start Early.
+              Stand Out. Succeed Faster.</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Why wait to graduate? Get real
+              experience, build skills that matter, and boost your confidence.</p>
+            <p class="text-lg md:text-xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200 mt-4"              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">&#10024; Hands-on learning &nbsp;
+              &#127919; Career-ready training &nbsp; &#128220; Certificate included</p>
+            <p class="text-lg md:text-xl font-semibold opacity-95 max-w-4xl mx-auto drop-shadow-md text-orange-200 mt-2"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Your future starts now &mdash; apply
+              today!</p>
+          </div>
+
+          <!-- Content Slide 1: Drafting -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Drafting (Legal
+              &amp; Professional)</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Master the art of legal and professional
+              document drafting with precision and clarity</p>
+          </div><!-- Content Slide 2: Women Safety Laws -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Women Safety Laws
+              in India</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Understand key legal frameworks
+              safeguarding women’s rights and safety</p>
+          </div><!-- Content Slide 3: Cybersecurity -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Cybersecurity
+            </h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Protect digital assets and master security
+              protocols in the modern digital landscape</p>
+          </div><!-- Content Slide 4: Crimes Investigation -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Crimes in
+              Investigation &amp; Evidence</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Learn advanced investigation techniques
+              and evidence preservation methodologies</p>
+          </div><!-- Content Slide 5: Cognitive Interviewing -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Cognitive
+              Interviewing Techniques</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Master psychological interviewing methods
+              for accurate information gathering</p>
+          </div><!-- Content Slide 6: Juvenile Justice -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Juvenile Justice
+              System in India</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Understand the legal framework and
+              rehabilitation approaches for juvenile offenders</p>
+          </div><!-- Content Slide 7: Child Psychology -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Child Psychology
+            </h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Study children’s cognitive & emotional
+              development using evidence-based methods</p>
+          </div><!-- Content Slide 8: Forensic Psychology -->
+          <div class="content-slide">
+            <h3 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg text-orange-400"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em;">Forensic &amp;
+              Investigative Psychology</h3>
+            <p class="text-xl md:text-2xl opacity-90 max-w-4xl mx-auto drop-shadow-md text-orange-200"
+              style="font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;">Apply psychological principles to criminal
+              investigations and legal proceedings</p>
+          </div>
+        </div><!-- Arrow Navigation --> <button id="home-prev-slide"
+          class="absolute left-8 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 p-4 rounded-full backdrop-blur-sm transition-all duration-300 shadow-lg">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg></button> <button id="home-next-slide"
+          class="absolute right-8 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 p-4 rounded-full backdrop-blur-sm transition-all duration-300 shadow-lg">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg></button>
+      </div>
+      <div class="text-center text-white fade-in mb-2 sm:mb-4">
+        <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})"
+          class="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:from-purple-700 hover:via-pink-700 hover:to-red-700 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-110 shadow-2xl">
+          <span class="flash-text">Get Started</span> </button>
+      </div><!-- Carousel Navigation Dots (9 dots: 0-8) -->
+      <div class="flex justify-center space-x-2 mt-3 sm:mt-4 fade-in">
+        <button class="home-carousel-dot w-2 h-2 rounded-full bg-white transition-all duration-300 shadow-sm"
+          data-slide="0"></button>
+        <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="1"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="2"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="3"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="4"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="5"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="6"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="7"></button> <button
+          class="home-carousel-dot w-2 h-2 rounded-full bg-white/50 hover:bg-white/70 transition-all duration-300 shadow-sm"
+          data-slide="8"></button>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- About Section -->
+  <section id="about" class="py-20 bg-gray-50 dark:bg-gray-800 theme-transition">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 text-violet-600 dark:text-violet-400">About The BluePrints</h2>
+        <div class="w-24 h-1 bg-primary mx-auto mb-8"></div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="fade-in">
+          <h3 class="text-2xl md:text-3xl font-bold mb-6 text-violet-600 dark:text-violet-400">Transforming knowledge
+            into real-world impact</h3>
+          <p class="text-lg mb-6 text-gray-700 dark:text-gray-300">To establish a multidisciplinary centre of excellence
+            that delivers cutting-edge education, training,
+            and research in criminology and forensic science, aimed at strengthening criminal justice systems
+            through scientific innovation, ethical practice, and community engagement.</p>
+          <div class="flex flex-wrap gap-4">
+            <div class="bg-primary/10 text-primary px-4 py-2 rounded-full font-semibold">
+              Expert Instructors
+            </div>
+            <div class="bg-primary/10 text-primary px-4 py-2 rounded-full font-semibold">
+              Practical Learning
+            </div>
+            <div class="bg-primary/10 text-primary px-4 py-2 rounded-full font-semibold">
+              Critical thinking
+            </div>
+          </div>
+        </div>
+        <div class="fade-in">
+          <div class="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-xl three-d-animated">
+            <h4 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">What We Offer</h4>
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <svg class="w-6 h-6 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg><span class="text-gray-700 dark:text-gray-300">Practical & skill-oriented</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-6 h-6 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg><span class="text-gray-700 dark:text-gray-300">Aligned with real-world scenarios</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-6 h-6 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg><span class="text-gray-700 dark:text-gray-300">Personalized mentorship</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-6 h-6 text-primary mt-1 mr-3 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg><span class="text-gray-700 dark:text-gray-300">Guided by experienced professionals</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Our Courses Section -->
+  <section id="courses" class="py-20 bg-gradient-to-br
+         from-blue-50 to-indigo-100
+         dark:from-gray-800 dark:to-gray-900
+         transition-colors duration-300">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Heading -->
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6
+                 text-violet-600 dark:text-violet-400">
+          Our Courses
+        </h2>
+
+        <div class="w-24 h-1 bg-primary mx-auto mb-8"></div>
+
+        <p class="text-lg max-w-2xl mx-auto
+                text-gray-700 dark:text-gray-300">
+          Explore our comprehensive certificate programs designed
+          to transform your ideas into reality
+        </p>
+      </div>
+
+      <!-- Courses Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- COURSE CARD -->
+        <div class="course-card bg-white dark:bg-gray-800
+               text-gray-800 dark:text-gray-200
+               rounded-xl shadow-lg overflow-hidden
+               transition-transform duration-500 ease-in-out
+               hover:scale-105 hover:shadow-2xl">
+
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-1.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Drafting (Legal & Professional)
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+
+
+        <!-- Course 2 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-2.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Women Safety Laws in India
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+        <!-- Course 3 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-3.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Cybersecurity
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+
+        <!-- Course 4 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-4.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Crimes in Investigation and Evidence Preservation
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+        <!-- Course 5 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-5.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Cognitive Interviewing Techniques
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+
+        <!-- Course 6 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-6.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Juvenile Justice System in India
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+        <!-- Course 7 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-7.jpg" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Child Psychology
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+        <!-- Course 8 -->
+        <div class="course-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden
+         transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-2xl">
+
+          <!-- Image -->
+          <div class="relative h-48 overflow-hidden group">
+
+            <img src="Images/certificatecourse-8.png" alt="Drafting Legal Course"
+              class="w-full h-full object-cover cursor-pointer" onclick="openImageModal(this)">
+
+            <!-- View Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+                flex items-center justify-center
+                pointer-events-none">
+              <span class="text-white font-semibold text-sm">View</span>
+            </div>
+
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 p-3">
+              <p class="text-white text-sm font-semibold text-center">
+                Forensic and Investigative Psychology
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 text-center">
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+              class="bg-primary hover:bg-secondary text-white font-semibold py-2 px-6 rounded-lg w-full">
+              Learn More
+            </button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+  <!-- Contact Section -->
+
+
+  <div class="bg-white">
+
+    <section id="contact" class="py-16">
+      <div class="text-center mb-12 px-4">
+        <h2 class="text-5xl font-bold text-purple-600">Contact Us</h2>
+        <div class="w-16 h-1 bg-blue-500 mx-auto my-4"></div>
+        <p class="text-gray-600 max-w-xl mx-auto">
+          Ready to start your journey? <br>
+          Contact us today and let's discuss how we can help you build your ideas.
+        </p>
+      </div>
+
+      <!-- GRID -->
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-4 sm:px-6">
+
+        <!-- LEFT CARD -->
+        <div class="bg-gradient-to-b from-purple-500 to-indigo-600 text-white rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-semibold mb-6">Get In Touch</h3>
+
+          <div class="flex items-start gap-4 mb-4 cursor-pointer" onclick="window.location.href='tel:+918667684263'">
+            <div class="bg-white/20 p-3 rounded-lg">📞</div>
+            <div>
+              <p class="font-semibold">+91 86676 84263</p>
+              <p class="text-sm opacity-80">Click to dial</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-4 mb-6 cursor-pointer" onclick="window.location.href='tel:+919791317197'">
+            <div class="bg-white/20 p-3 rounded-lg">📞</div>
+            <div>
+              <p class="font-semibold">+91 97913 17197</p>
+              <p class="text-sm opacity-80">Click to dial</p>
+            </div>
+          </div>
+
+          <hr class="border-white/30 mb-6">
+          <!-- EMAIL -->
+          <div class="flex items-start gap-4 cursor-pointer"
+            onclick="window.location.href='mailto:theblueprintstech@gmail.com'">
+            <div class="bg-white/20 p-3 rounded-lg flex items-center justify-center">
+              <i class="material-icons" style="font-size:22px">email</i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+                theblueprintstech@gmail.com
+              </p>
+              <p class="text-sm opacity-80">Click to send email</p>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <div class="poster-card">
+              <img src="Images/internshipposter.jpeg" alt="The BluePrints internship poster">
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT FORM -->
+        <form id="contactForm" class="bg-white dark:bg-[#0a1f3d] rounded-2xl shadow-lg p-6 sm:p-8 space-y-4">
+          <br>
+          <!-- INPUTS -->
+          <!-- NAME -->
+          <input type="text" id="name" placeholder="Name" required class="w-full border rounded-lg px-4 py-3
+           bg-white dark:bg-[#102a4d]
+           text-gray-900 dark:text-white
+           placeholder-gray-400
+           focus:ring-2 focus:ring-blue-400">
+
+          <!-- EDUCATION -->
+          <input type="text" id="education" placeholder="Education" required class="w-full border rounded-lg px-4 py-3
+           bg-white dark:bg-[#102a4d]
+           text-gray-900 dark:text-white
+           placeholder-gray-400
+           focus:ring-2 focus:ring-blue-400">
+
+          <!-- PHONE -->
+          <input type="tel" id="phone" placeholder="Phone Number" required pattern="[0-9]{10}" maxlength="10" oninput="
+    if (/[^0-9]/.test(this.value)) {
+      this.setCustomValidity('This field accepts numbers only');
+    } else {
+      this.setCustomValidity('');
+    }
+    this.value = this.value.replace(/[^0-9]/g,'');
+    this.reportValidity();
+  " class="w-full border rounded-lg px-4 py-3
+         bg-white dark:bg-[#102a4d]
+         text-gray-900 dark:text-white
+         placeholder-gray-400
+         focus:ring-2 focus:ring-blue-400">
+
+
+          <!-- EMAIL -->
+          <input type="email" id="email" placeholder="Email Address" required
+            oninvalid="this.setCustomValidity('Please enter a valid email address')"
+            oninput="this.setCustomValidity('')" class="w-full border rounded-lg px-4 py-3
+           bg-white dark:bg-[#102a4d]
+           text-gray-900 dark:text-white
+           placeholder-gray-400
+           focus:ring-2 focus:ring-blue-400">
+
+
+          <!-- LOOKING FOR -->
+          <div class="border rounded-lg p-4 flex flex-wrap gap-4 text-sm
+                  bg-white dark:bg-[#102a4d]
+                  text-gray-700 dark:text-gray-200
+                  border-gray-300 dark:border-gray-600">
+
+            <span class="font-medium w-full sm:w-auto">🔍 Looking for?</span>
+
+            <label class="flex items-center gap-1">
+              <input type="radio" name="lookingFor" required> Course
+            </label>
+
+            <span class="hidden sm:inline font-semibold text-gray-500 dark:text-gray-400">OR</span>
+
+            <label class="flex items-center gap-1">
+              <input type="radio" name="lookingFor"> Internship
+            </label>
+          </div>
+
+          <!-- COURSES -->
+          <div class="border rounded-lg h-44 overflow-y-auto text-sm
+                  bg-white dark:bg-[#102a4d]
+                  text-gray-700 dark:text-gray-200
+                  border-gray-300 dark:border-gray-600">
+
+            <div class="sticky top-0 p-3 border-b font-medium
+                    bg-white dark:bg-[#102a4d]">
+              📘 Courses
+            </div>
+
+            <div class="p-3 space-y-2">
+              <label class="flex gap-2"><input type="checkbox"> Drafting (Legal & Professional)</label>
+              <label class="flex gap-2"><input type="checkbox"> Women Safety Laws in India</label>
+              <label class="flex gap-2"><input type="checkbox"> Cybersecurity</label>
+              <label class="flex gap-2"><input type="checkbox"> Crimes in Investigation & Evidence</label>
+              <label class="flex gap-2"><input type="checkbox"> Cognitive Interviewing Techniques</label>
+              <label class="flex gap-2"><input type="checkbox"> Juvenile Justice System in India</label>
+              <label class="flex gap-2"><input type="checkbox"> Child Psychology</label>
+              <label class="flex gap-2"><input type="checkbox"> Forensic and Investigative Psychology</label>
+            </div>
+          </div>
+
+          <!-- MESSAGE -->
+          <textarea rows="4" placeholder="Message" class="w-full input-style"></textarea>
+
+          <!-- BUTTONS -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <button type="button" onclick="submitForm('whatsapp')" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold
+           flex items-center justify-center gap-2">
+              <i class="fa fa-whatsapp" style="font-size:20px"></i>
+              Send via WhatsApp            </button>
+
+
+            <button type="button" onclick="submitForm('email')" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold
+         flex items-center justify-center gap-2">
+              <i class="material-icons" style="font-size:20px">email</i>
+              Send via Email
+            </button>
+
+          </div>
+
+          <!-- SUCCESS MESSAGE -->
+          <div id="successMsg" class="mt-4 text-green-600 font-semibold hidden">
+            ✅ Your message has been prepared! Please check WhatsApp or your emailto send it.
+          </div>
+
+
+        </form>
+      </div>
+    </section>
+
+  </div>
+
+
+
+
+
+
+
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 dark:bg-black text-white py-12 theme-transition">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h3 class="text-2xl font-bold mb-4">The BluePrints</h3>
+        <p class="text-gray-400 mb-6">We Build Your Ideas</p>
+        <div class="border-t border-gray-800 pt-8">
+          <p class="text-gray-400">© 2025 The BluePrints. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+
+
+  <!-- IMAGE MODAL -->
+  <div id="imageModal" class="fixed inset-0 hidden bg-black bg-opacity-80 z-50
+            flex items-center justify-center" onclick="closeImageModal()">
+
+    <span class="absolute top-6 right-8 text-white text-4xl cursor-pointer">
+      &times;
+    </span>
+
+    <img id="modalImage" class="max-w-[90%] max-h-[90%] object-contain rounded-lg">
+  </div>
+
+
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+
+    // Check for saved theme preference or default to light mode
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    html.classList.toggle('dark', currentTheme === 'dark');
+
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      const newTheme = html.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking on links
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Scroll Animation
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all fade-in elements
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    function submitForm(type) {
+      const form = document.getElementById("contactForm");
+
+      const courseCheckboxes = document.querySelectorAll(
+        'input[type="checkbox"]'
+      );
+
+      const selectedCourses = Array.from(courseCheckboxes).filter(cb => cb.checked);
+
+      courseCheckboxes.forEach(cb => cb.setCustomValidity(""));
+
+      if (selectedCourses.length === 0) {
+        courseCheckboxes[0].setCustomValidity(
+          "Please select at least one course."
+        );
+        form.reportValidity();
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const nameVal = document.getElementById("name")?.value || "";
+      const educationVal = document.getElementById("education")?.value || "";
+      const phoneVal = document.getElementById("phone")?.value || "";
+      const emailVal = document.getElementById("email")?.value || "";
+      const messageVal = document.getElementById("message")?.value || "";
+
+      const lookingForEl = document.querySelector(
+        'input[name="lookingFor"]:checked'
+      );
+      const lookingForVal = lookingForEl
+        ? lookingForEl.parentElement.textContent.trim()
+        : "N/A";
+
+      const coursesText = selectedCourses
+        .map(cb => cb.parentElement.textContent.trim())
+        .join(", ");
+
+      const finalMessage = encodeURIComponent(
+        `Name: ${nameVal}
+Education: ${educationVal}
+Phone: ${phoneVal}
+Email: ${emailVal}
+Looking For: ${lookingForVal}
+Courses: ${coursesText}
+Message: ${messageVal.trim() ? messageVal : "N/A"}`
+      );
+
+      document.getElementById("successMsg").classList.remove("hidden");
+
+      if (type === "whatsapp") {
+        window.open(
+          `https://wa.me/918667684263?text=${finalMessage}`,
+          "_blank"
+        );
+      } else {
+        window.open(
+          `mailto:theblueprintstech@gmail.com?subject=Contact Form Enquiry&body=${finalMessage}`,
+          "_blank"
+        );
+      }
+    }
+
+    // Copy and Call Function
+    function copyAndCall(phoneNumber) {
+      navigator.clipboard.writeText(phoneNumber).then(() => {
+        showToast('Phone number copied!');
+        window.open(`tel:${phoneNumber}`, '_blank', 'noopener,noreferrer');
+      }).catch(() => {
+        showToast('Opening dialer...');
+        window.open(`tel:${phoneNumber}`, '_blank', 'noopener,noreferrer');
+      });
+    }
+
+    // Toast notification function
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-24 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 2000);
+    }
+
+    window.copyAndCall = copyAndCall;
+
+    // Home Carousel Functionality
+    let homeCurrentSlide = 0;
+
+    const homeTotalSlides = 9;
+    const homeBgCarouselContainer = document.getElementById('home-bg-carousel-container');
+    const homeContentSlides = document.querySelectorAll('.content-slide');
+    const homeCarouselDots = document.querySelectorAll('.home-carousel-dot');
+    const homePrevButton = document.getElementById('home-prev-slide');
+    const homeNextButton = document.getElementById('home-next-slide');
+
+    function updateHomeCarousel() {
+      const translateX = -homeCurrentSlide * 100;
+      homeBgCarouselContainer.style.transform = `translateX(${translateX}%)`;
+
+      homeContentSlides.forEach((slide, index) => {
+        if (index === homeCurrentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      homeCarouselDots.forEach((dot, index) => {
+        if (index === homeCurrentSlide) {
+          dot.classList.remove('bg-white/50', 'hover:bg-white/70');
+          dot.classList.add('bg-white');
+        } else {
+          dot.classList.remove('bg-white');
+          dot.classList.add('bg-white/50', 'hover:bg-white/70');
+        }
+      });
+    }
+
+    function homeNextSlide() {
+      homeCurrentSlide = (homeCurrentSlide + 1) % homeTotalSlides;
+      updateHomeCarousel();
+    }
+
+    function homePrevSlide() {
+      homeCurrentSlide = (homeCurrentSlide - 1 + homeTotalSlides) % homeTotalSlides;
+      updateHomeCarousel();
+    }
+
+    function homeGoToSlide(slideIndex) {
+      homeCurrentSlide = slideIndex;
+      updateHomeCarousel();
+    }
+
+    homeNextButton.addEventListener('click', homeNextSlide);
+    homePrevButton.addEventListener('click', homePrevSlide);
+
+    homeCarouselDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => homeGoToSlide(index));
+    });
+
+    // Auto-play home carousel
+    let homeAutoPlayInterval = setInterval(homeNextSlide, 3000);
+
+    const homeSection = document.getElementById('home');
+    homeSection.addEventListener('mouseenter', () => {
+      clearInterval(homeAutoPlayInterval);
+    });
+
+    homeSection.addEventListener('mouseleave', () => {
+      homeAutoPlayInterval = setInterval(homeNextSlide, 3000);
+    });
+
+    // Touch/swipe support for home carousel
+    let homeStartX = 0;
+    let homeEndX = 0;
+
+    homeSection.addEventListener('touchstart', (e) => {
+      homeStartX = e.touches[0].clientX;
+    });
+
+    homeSection.addEventListener('touchend', (e) => {
+      homeEndX = e.changedTouches[0].clientX;
+      const difference = homeStartX - homeEndX;
+
+      if (Math.abs(difference) > 50) {
+        if (difference > 0) {
+          homeNextSlide();
+        } else {
+          homePrevSlide();
+        }
+      }
+    });
+
+    // Keyboard navigation for home carousel
+    document.addEventListener('keydown', (e) => {
+      const rect = homeSection.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        if (e.key === 'ArrowLeft') {
+          homePrevSlide();
+        } else if (e.key === 'ArrowRight') {
+          homeNextSlide();
+        }
+      }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href === "#") return;
+
+        e.preventDefault();
+
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    function openImageModal(element) {
+      const modal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("modalImage");
+
+      let img = element.tagName === "IMG"
+        ? element
+        : element.querySelector("img");
+
+      if (!img || !img.src) {
+        console.error("Image not found");
+        return;      }
+
+      modalImg.src = img.src;
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById("imageModal");
+      modal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeImageModal();
+    });
+
+    const imageModalEl = document.getElementById("imageModal");
+    if (imageModalEl) {
+      imageModalEl.addEventListener("click", (e) => {
+        if (e.target.id === "imageModal") closeImageModal();
+      });
+    }
+  </script>
+</body>
+
+</html>

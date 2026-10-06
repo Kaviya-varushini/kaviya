@@ -1,13 +1,13 @@
 # Hi, I'm Kaviya 👋
 
-### Frontend Developer | React • TypeScript • JavaScript
+### Full-Stack Developer | React • Node.js • Express • MongoDB
 
-I build clean, responsive web experiences with a focus on **modern UI, usability, and practical problem-solving**.
+I build clean, responsive web applications with a focus on **modern UI, usability, practical problem-solving, and full-stack development**.
 
-- 🌱 Currently strengthening my skills in **React, TypeScript, JavaScript, and full-stack development**
-- 💻 Interested in **Frontend / Web Development** opportunities
+- 🌱 Strengthening my skills in **React, TypeScript, JavaScript, Node.js, and the MERN stack**
+- 💻 Interested in **Full-Stack / Web Development** opportunities
 - 🧩 I enjoy turning ideas into responsive, user-friendly interfaces
-- 🚀 Open to collaboration, internships, and development projects
+- 🚀 Open to collaboration, internships, freelance and development projects
 - 📍 Thanjavur, India
 
 ---
@@ -27,6 +27,12 @@ A responsive developer portfolio showcasing my projects, skills, experience, cer
 
 **Live:** [kaviyaportfolio.s.gy](https://kaviyaportfolio.s.gy/)
 
+### 📚 BluePrints — Certificate Courses Website
+A responsive course website built for **The BluePrints**, featuring course cards, certificate gallery, image previews, light/dark mode, responsive navigation, animations, and WhatsApp/email enquiry actions.
+
+**Live:** [blueprintstech.netlify.app](https://blueprintstech.netlify.app/)  
+**Source:** [View Project](https://github.com/Kaviya-varushini/kaviya/tree/main/projects/blueprintstech)
+
 ### 💳 Forage Midas
 A software development project completed as part of a Forage experience, focused on practical application development and engineering workflows.
 
@@ -37,9 +43,10 @@ A software development project completed as part of a Forage experience, focused
 ## 📌 What I'm Working On
 
 - Building responsive React applications
+- Developing full-stack applications with the MERN stack
 - Improving TypeScript and reusable component architecture
-- Learning full-stack development with the MERN stack
-- Creating projects that demonstrate real-world development skills
+- Creating real-world projects for my developer portfolio
+- Exploring freelance web development opportunities
 
 ---
 

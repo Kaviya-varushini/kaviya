@@ -5,7 +5,6 @@ A responsive certificate-course website for **The BluePrints**, designed to pres
 ## Live Website
 
 - **Live:** https://blueprintstech.netlify.app/
-- **Netlify:** https://app.netlify.com/projects/blueprintstech/overview
 
 ## Highlights
 
